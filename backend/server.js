@@ -5,6 +5,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 
 import { sql } from "./config/db.js";
+import { aj } from "./lib/arcjet.js";
 import productRoutes from "./routes/productRoutes.js";
 
 dotenv.config();
@@ -16,6 +17,33 @@ app.use(express.json());
 app.use(cors());
 app.use(helmet());
 app.use(morgan("dev"));
+
+// apply arcjet middleware to all routes
+app.use(async (req, res, next) => {
+  try {
+    const decision = await aj.protect(req, { requested: 1 });
+    if (decision.isDenied()) {
+      if (decision.reason.isRateLimit()) {
+        res.end(JSON.stringify({ error: "Too Many Requests" }));
+      } else if (decision.reason.isBot()) {
+        res.end(JSON.stringify({ error: "No bots allowed" }));
+      } else {
+        res.end(JSON.stringify({ error: "Forbidden" }));
+      }
+      return
+    }
+
+    // Check for isSpoofedBot 
+    if (decision.results.some((result) => result.reason.isBot() && result.reason.isSpoofed())){
+        res.status(403).json({error: "Spoofed bot detected"});
+        return
+    }
+    next();
+  } catch (error) {
+    console.error("Arcjet middleware error:", error);
+    next(error)
+  }
+});
 
 app.use("/api/products", productRoutes);
 
@@ -30,7 +58,7 @@ async function initDB() {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         `; // Test the database connection
-        console.log("Database initialized successfully.");
+    console.log("Database initialized successfully.");
   } catch (error) {
     console.log("Error initializing database:", error);
   }
