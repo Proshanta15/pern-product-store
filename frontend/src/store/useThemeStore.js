@@ -4,6 +4,12 @@ export const useThemeStore = create((set) => ({
   theme: localStorage.getItem("preferred-theme") || "forest",
   setTheme: (theme) => {
     localStorage.setItem("preferred-theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
     set({ theme });
   },
 }));
+
+if (typeof window !== "undefined") {
+  const savedTheme = localStorage.getItem("preferred-theme") || "forest";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+}
