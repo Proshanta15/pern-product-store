@@ -30,7 +30,7 @@ const AddProductModal = () => {
                 </div>
               </div>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-base-content/50">
+                <div className="absolute inset-y-0 top-0 z-10 left-0 pl-3 flex items-center pointer-events-none text-base-content/50">
                   <ImageIcon className="size-5" />
                 </div>
                 <input
@@ -51,7 +51,7 @@ const AddProductModal = () => {
                 </div>
               </div>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 items-center pointer-events-none text-base-content/50">
+                <div className="absolute inset-y-0 top-2.5 z-10 left-0 pl-3 items-center pointer-events-none text-base-content/50">
                   <Package2Icon className="size-5" />
                 </div>
                 <input
@@ -72,7 +72,7 @@ const AddProductModal = () => {
                 </div>
               </div>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 items-center pointer-events-none text-base-content/50">
+                <div className="absolute inset-y-0 left-0 top-2.5 z-10 pl-3 items-center pointer-events-none text-base-content/50">
                   <DollarSignIcon className="size-5" />
                 </div>
                 <input
