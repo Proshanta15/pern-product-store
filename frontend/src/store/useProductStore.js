@@ -66,5 +66,9 @@ export const useProductStore = create((set, get) => ({
     } finally{
       set({loading: false})
     }
-  }
+  },
+
+  // Fetch product
+
+  
 }));
